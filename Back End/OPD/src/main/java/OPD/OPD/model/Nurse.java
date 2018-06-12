@@ -3,10 +3,10 @@ package OPD.OPD.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="doctor")
-public class Doctor {
+@Document(collection="nurse")
+public class Nurse {
 	@Id
-	private String docRegNo;
+	private String nurseRegNo;
 	private String fName;
 	private String lName;
 	private String nic;
@@ -15,11 +15,11 @@ public class Doctor {
 	private String email;
 	private String username;
 	private String password;
-	public String getDocRegNo() {
-		return docRegNo;
+	public String getNurseRegNo() {
+		return nurseRegNo;
 	}
-	public void setDocRegNo(String docRegNo) {
-		this.docRegNo = docRegNo;
+	public void setNurseRegNo(String nurseRegNo) {
+		this.nurseRegNo = nurseRegNo;
 	}
 	public String getfName() {
 		return fName;
