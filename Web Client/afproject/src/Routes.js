@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './Login';
-import AccCreate from './Register.js';
-import DocAccCreate from './DoctorReg';
-import NurseAccCreate from './NurseReg';
+import Login from './Components/Login';
+import AccCreate from './Components/Register.js';
+import DocAccCreate from './Components/DoctorReg';
+import NurseAccCreate from './Components/NurseReg';
 
 export default () =>{
     return(
