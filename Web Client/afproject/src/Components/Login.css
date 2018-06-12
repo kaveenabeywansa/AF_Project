@@ -26,6 +26,7 @@ body{
   color:white;
   font-size: 110%;
   font-weight: bold;
+  text-shadow: 2px 2px grey;
 }
 .RegisterComp{
   margin-top: 5%;

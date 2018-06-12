@@ -14,7 +14,6 @@ public class Doctor {
 	private String phone;
 	private String email;
 	private String username;
-	private String password;
 	public String getDocRegNo() {
 		return docRegNo;
 	}
@@ -62,11 +61,5 @@ public class Doctor {
 	}
 	public void setUsername(String username) {
 		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 }

@@ -1,11 +1,65 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class DoctorRegister extends Component {
-    registerDoc(obj) {
-        alert('Register Clicked !');
+    validate(obj){
+        if ((document.getElementById("regno").value==="") || (document.getElementById("fname").value==="") ||
+        (document.getElementById("lname").value==="") || (document.getElementById("nic").value==="") ||
+        (document.getElementById("address").value==="") || (document.getElementById("phone").value==="") |
+        (document.getElementById("email").value==="") || (document.getElementById("username").value==="") ||
+        (document.getElementById("password").value==="") || (document.getElementById("confpassword").value==="")){
+            alert('Your cannot have empty field ! Please fill all fields to register !');
+        }else{
+            if(document.getElementById("password").value===document.getElementById("confpassword").value){
+                this.postToDatabase(obj);
+            }else{
+                alert('Password do not match... Re-check and Re-try !');
+            }
+        }
     }
-    clearFields(obj){
-        alert('Clear Fields Clicked !');
+    postToDatabase(obj){
+        axios.post('http://localhost:8080/doctor', {
+            docRegNo: document.getElementById("regno").value,
+            fName: document.getElementById("fname").value,
+            lname: document.getElementById("lname").value,
+            nic: document.getElementById("nic").value,
+            address: document.getElementById("address").value,
+            phone: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            username: document.getElementById("username").value,
+        })
+            .then(function (response) {
+                axios.post('http://localhost:8080/login', {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                    userType: "doctor"
+                })
+                    .then(function (response) {
+                        obj.clearFields();
+                        alert('Successfully Registered !');
+                        obj.props.history.push('/login');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert('An error occured !');
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert('An error occured !');
+            });
+    }
+    clearFields(obj) {
+        document.getElementById("regno").value="";
+        document.getElementById("fname").value="";
+        document.getElementById("lname").value="";
+        document.getElementById("nic").value="";
+        document.getElementById("address").value="";
+        document.getElementById("phone").value="";
+        document.getElementById("email").value="";
+        document.getElementById("username").value="";
+        document.getElementById("password").value="";
+        document.getElementById("confpassword").value="";
     }
     render() {
         return (
@@ -29,7 +83,7 @@ class DoctorRegister extends Component {
                         </div>
                         <div className="col-md-6">
                             <div className="form-group">
-                            <label className="formLabel1">Phone Number</label>
+                                <label className="formLabel1">Phone Number</label>
                                 <input type="text" className="form-control" id="phone" placeholder="Phone Number" />
                                 <label className="formLabel1">E-mail Address</label>
                                 <input type="email" className="form-control" id="email" placeholder="E-Mail" />
@@ -45,7 +99,7 @@ class DoctorRegister extends Component {
                     <center>
                         <button className="btn btn-warning" onClick={() => this.clearFields(this)}>Clear Fields</button>
                         {' '}
-                        <button className="btn btn-primary" onClick={() => this.registerDoc(this)}>Create Account</button>
+                        <button className="btn btn-primary" onClick={() => this.validate(this)}>Create Account</button>
                     </center>
                 </div>
             </div>

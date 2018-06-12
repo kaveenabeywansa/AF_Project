@@ -10,21 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import OPD.OPD.model.Doctor;
-import OPD.OPD.model.DoctorRepository;
-import OPD.OPD.model.LoginCredentials;
+import OPD.OPD.model.Nurse;
+import OPD.OPD.model.NurseRepository;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/doctor")
-public class DoctorService {
+@RequestMapping("/nurse")
+public class NurseService {
 	@Autowired
-	private DoctorRepository docRepository;
+	private NurseRepository nurseRepository;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void addDoctor(@RequestBody Doctor instance) {
+	public void addNurse(@RequestBody Nurse instance) {
 		try {
-			docRepository.save(instance);
+			nurseRepository.save(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,21 +31,21 @@ public class DoctorService {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Doctor> getAllDoctors() {
-		List<Doctor> docList = null;
+	public List<Nurse> getAllNurses() {
+		List<Nurse> nurseList = null;
 		try {
-			docList = docRepository.findAll();
+			nurseList = nurseRepository.findAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return docList;
+			return nurseList;
 		}
 	}
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/{Id}", method = RequestMethod.GET)
-	public Doctor getDoctor(@PathVariable String Id) {
-		Doctor instance = null;
+	public Nurse getNurse(@PathVariable String Id) {
+		Nurse instance = null;
 		try {
 			instance = FindOne(Id);
 		} catch (Exception e) {
@@ -57,40 +56,40 @@ public class DoctorService {
 	}
 
 	@RequestMapping(value = "/{Id}", method = RequestMethod.PUT)
-	public void updateDoctor(@PathVariable String Id, @RequestBody Doctor instance) {
+	public void updateNurse(@PathVariable String Id, @RequestBody Nurse instance) {
 		try {
-			Doctor temp = FindOne(Id);
+			Nurse temp = FindOne(Id);
 			if (temp != null) {
 				temp.setfName(instance.getfName());
 				temp.setlName(instance.getlName());
 				// set others if necessary
-				docRepository.save(temp);
+				nurseRepository.save(temp);
 			}
-			docRepository.save(instance);
+			nurseRepository.save(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@RequestMapping(value = "/{Id}", method = RequestMethod.DELETE)
-	public void deleteDoctor(@PathVariable String Id) {
+	public void deleteNurse(@PathVariable String Id) {
 		try {
-			Doctor instance = FindOne(Id);
+			Nurse instance = FindOne(Id);
 			if (instance != null)
-				docRepository.delete(instance);
+				nurseRepository.delete(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@SuppressWarnings("finally")
-	public Doctor FindOne(String Id) {
-		Doctor instance = null;
+	public Nurse FindOne(String Id) {
+		Nurse instance = null;
 		try {
-			List<Doctor> docList = docRepository.findAll();
-			for (Doctor d : docList) {
-				if (d.getUsername().equals(Id)) {
-					instance = d;
+			List<Nurse> nurseList = nurseRepository.findAll();
+			for (Nurse n : nurseList) {
+				if (n.getUsername().equals(Id)) {
+					instance = n;
 					break;
 				}
 			}

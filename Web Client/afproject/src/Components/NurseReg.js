@@ -1,11 +1,65 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class NurseRegister extends Component {
+    validate(obj){
+        if ((document.getElementById("regno").value==="") || (document.getElementById("fname").value==="") ||
+        (document.getElementById("lname").value==="") || (document.getElementById("nic").value==="") ||
+        (document.getElementById("address").value==="") || (document.getElementById("phone").value==="") |
+        (document.getElementById("email").value==="") || (document.getElementById("username").value==="") ||
+        (document.getElementById("password").value==="") || (document.getElementById("confpassword").value==="")){
+            alert('Your cannot have empty field ! Please fill all fields to register !');
+        }else{
+            if(document.getElementById("password").value===document.getElementById("confpassword").value){
+                this.registerNurse(obj);
+            }else{
+                alert('Password do not match... Re-check and Re-try !');
+            }
+        }
+    }
     registerNurse(obj) {
-        alert('Register Clicked !');
+        axios.post('http://localhost:8080/nurse', {
+            nurseRegNo: document.getElementById("regno").value,
+            fName: document.getElementById("fname").value,
+            lname: document.getElementById("lname").value,
+            nic: document.getElementById("nic").value,
+            address: document.getElementById("address").value,
+            phone: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            username: document.getElementById("username").value,
+        })
+            .then(function (response) {
+                axios.post('http://localhost:8080/login', {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                    userType: "nurse"
+                })
+                    .then(function (response) {
+                        obj.clearFields();
+                        alert('Successfully Registered !');
+                        obj.props.history.push('/login');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert('An error occured !');
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert('An error occured !');
+            });
     }
     clearFields(obj){
-        alert('Clear Fields Clicked !');
+        document.getElementById("regno").value="";
+        document.getElementById("fname").value="";
+        document.getElementById("lname").value="";
+        document.getElementById("nic").value="";
+        document.getElementById("address").value="";
+        document.getElementById("phone").value="";
+        document.getElementById("email").value="";
+        document.getElementById("username").value="";
+        document.getElementById("password").value="";
+        document.getElementById("confpassword").value="";
     }
     render() {
         return (
@@ -45,7 +99,7 @@ class NurseRegister extends Component {
                     <center>
                         <button className="btn btn-warning" onClick={() => this.clearFields(this)}>Clear Fields</button>
                         {' '}
-                        <button className="btn btn-primary" onClick={() => this.registerNurse(this)}>Create Account</button>
+                        <button className="btn btn-primary" onClick={() => this.validate(this)}>Create Account</button>
                     </center>
                 </div>
             </div>

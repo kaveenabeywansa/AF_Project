@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //import UserSession from '../../SessionDet';
-//import axios from 'axios';
+import axios from 'axios';
 import './Login.css';
 
 class Login extends Component {
@@ -9,27 +9,33 @@ class Login extends Component {
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
     }
-    signIn2(obj){
-      alert('Log in clicked !');
-    }
     signIn(obj) {
-        // var link = 'http://localhost:3001/customer/' + document.getElementById("phone").value;
-        // axios.get(link,{ headers: {"Authorization" : "admin123"}}).then(function (response) {
-        //     try {
-        //         if (response.data.data[0].password === document.getElementById("password").value) {
-        //             UserSession.initiateSession(response.data.data[0].name,response.data.data[0].nic,response.data.data[0].address,
-        //                 response.data.data[0].phone);
-        //             UserSession.addPoints(response.data.data[0].loyaltyPoint);
-        //             obj.props.history.push('/order');
-        //         } else {
-        //             alert("Incorrect Password !");
-        //         }
-        //     } catch (error) {
-        //         alert("Incorrect phone number or password !");
-        //     }
-        // }).catch(function (error) {
-        //     alert(error);
-        // });
+        axios.post('http://localhost:8080/login/user', {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+          })
+          .then(function (response) {
+            if(response.data==="doctor"){
+                obj.doctorLogin(obj);
+            }else if(response.data==="nurse"){
+                obj.nurseLogin(obj);
+            }else{
+                alert('Incorrect Username or Password !')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+    doctorLogin(obj){
+        //do the processing for the doctor's login
+        alert('Doctor Login Success !');
+        obj.clearFields();
+    }
+    nurseLogin(obj){
+        //do the processing for the nurse's login
+        alert('Nurse Login Success !');
+        obj.clearFields();
     }
     render() {
         return (
@@ -49,7 +55,7 @@ class Login extends Component {
                         <div>
                             <button type="button" className="btn btn-warning" onClick={() => this.clearFields()}>Reset Fields</button>
                             {'    '}
-                            <button type="button" className="btn btn-primary" onClick={() => this.signIn2(this)}>Sign In</button>
+                            <button type="button" className="btn btn-primary" onClick={() => this.signIn(this)}>Sign In</button>
                         </div>
                     </fieldset>
                     <div className="createtxt"> If you dont have an account,<Link to="/register">Create One.</Link></div>
