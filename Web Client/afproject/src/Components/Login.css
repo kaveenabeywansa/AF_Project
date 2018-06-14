@@ -54,3 +54,45 @@ body{
   font-weight: bold;
   text-shadow: 2px 2px grey;
 }
+
+/* 
+  For Side bar
+*/
+
+.nav-bar{
+  width: 15%;
+  background-color: #303030;
+  color: white;
+  height: 100%;
+  top: 50px;
+  position: fixed;
+}
+#Sample2-header{
+  margin-left: 220px;
+  margin-top: 65px;
+  width: 82.5%;
+  height: 35px;
+  background-color: skyblue;
+  padding-top: 5px;
+  font-size: 22px;
+}
+.editPatient{
+  margin: 20px 0 0 220px;
+  background-color: white;
+  width: 82.5%;
+}
+.editPatient2{
+  margin-left: 5%;
+}
+.patientSummery{
+  margin: 75px 0 0 30%;
+  background-color: white;
+  width: 50%;
+}
+.card-header{
+  background-color: #0099ff;
+}
+.editPatientBlock{
+  margin-left: 10%;
+  width: 50%;
+}
