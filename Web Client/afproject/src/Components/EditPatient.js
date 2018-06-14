@@ -1,33 +1,121 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import Calendar from 'react-calendar';
+import axios from 'axios';
 import './Login.css';
+import { Nav, NavItem, Navbar, NavDropdown, MenuItem } from "react-bootstrap"
 
 class EditPatient extends Component {
+    constructor(props) {
+        super(props);
+        this.fillFields(this);
+    }
+    fillFields(obj) {
+        sessionStorage.setItem('patientnic', '1111');
+        axios.get('http://localhost:3001/patient/' + sessionStorage.getItem('patientnic'))
+            .then(function (response) {
+                if (response.data.data.length === 1) {
+                    var res = response.data.data[0];
+
+                    document.getElementById('name').innerHTML = res.Full_Name;
+                    document.getElementById('nic').innerHTML += sessionStorage.getItem('patientnic');
+                    document.getElementById('genderinfo').innerHTML += res.gender;
+                    document.getElementById('status').innerHTML += res.civil_status;
+                    document.getElementById('dob').innerHTML += res.DateOfBirth;
+
+                    document.getElementById('fullname').value = res.Full_Name;
+                    document.getElementById('othername').value = res.other_name;
+                    document.getElementById('civilstatus').value = res.civil_status;
+                    document.getElementById('gender').value = res.gender;
+                    obj.state.date = res.DateOfBirth;
+                    document.getElementById('nic').value = res.nic;
+                    document.getElementById('citizenship').value = res.citizenship;
+                    document.getElementById('bloodgroup').value = res.Blood_Group;
+                    document.getElementById('language').value = res.preferred_language;
+                    document.getElementById('address').value = res.Address;
+                    document.getElementById('phone').value = res.phone;
+                    document.getElementById('contactperson').value = res.contact_person_name;
+                    document.getElementById('contactpersonphone').value = res.contact_person_tel;
+                } else {
+                    alert('An Error Occured !');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
     state = {
-        date: new Date(),
-        photo: null
+        date: new Date()
     };
     updatePatient(obj) {
-        console.log(obj.state.date);
-        console.log(obj.state.photo);
-
-        //get calendar
-        //get filechoser
+        axios.put('http://localhost:3001/patient/' + sessionStorage.getItem('patientnic'), {
+            Full_Name: document.getElementById('fullname').value,
+            other_name: document.getElementById('othername').value,
+            civil_status: document.getElementById('civilstatus').value,
+            gender: document.getElementById('gender').value,
+            DateOfBirth: obj.state.date,
+            nic: document.getElementById('nic').value,
+            citizenship: document.getElementById('citizenship').value,
+            Blood_Group: document.getElementById('bloodgroup').value,
+            preferred_language: document.getElementById('language').value,
+            Address: document.getElementById('address').value,
+            phone: document.getElementById('phone').value,
+            contact_person_name: document.getElementById('contactperson').value,
+            contact_person_tel: document.getElementById('contactpersonphone').value
+        })
+            .then(function (response) {
+                alert('Successfully Edited !');
+                sessionStorage.setItem('patientnic', document.getElementById('nic'));
+                //obj.props.history.push('/nurse/patientoverview');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
     datePicked(e, obj) {
         obj.setState({
             date: e
         });
     }
-    handleChange(selectorFiles,obj) {
-        obj.setState({
-            photo:selectorFiles
-        });
-    }
+
     render() {
         return (
             <div>
+                <div>
+                    <Navbar inverse collapseOnSelect>
+                        <Navbar.Header>
+                            <Navbar.Brand>
+                                <a href="#brand">React-Bootstrap</a>
+                            </Navbar.Brand>
+                            <Navbar.Toggle />
+                        </Navbar.Header>
+                        <Navbar.Collapse>
+                            <Nav>
+                                <NavItem eventKey={1} href="#">
+                                    Link
+                                </NavItem>
+                                <NavItem eventKey={2} href="#">
+                                    Link
+                                </NavItem>
+                                <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+                                    <MenuItem eventKey={3.1}>Action</MenuItem>
+                                    <MenuItem eventKey={3.2}>Another action</MenuItem>
+                                    <MenuItem eventKey={3.3}>Something else here</MenuItem>
+                                    <MenuItem divider />
+                                    <MenuItem eventKey={3.3}>Separated link</MenuItem>
+                                </NavDropdown>
+                            </Nav>
+                            <Nav pullRight>
+                                <NavItem eventKey={1} href="#">
+                                    Link Right
+                                </NavItem>
+                                <NavItem eventKey={2} href="#">
+                                    Link Right
+                                </NavItem>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                </div>
                 <div>
                     <div className="nav-bar">
                         <ul>
@@ -40,13 +128,12 @@ class EditPatient extends Component {
                     <div className="patientSummery">
                         <div className="card-header">Patient Information</div>
                         <div className="card-body">
-                            <h6 className="card-title">Patient Profile</h6>
-                            <hr />
-                            <h4 id="name" className="card-title">Display Name Here...</h4>
-                            <h6 id="hin" className="card-title">HIN: </h6>
-                            <h6 id="gender" className="card-title">Gender: </h6>
-                            <h6 id="status" className="card-title">Status: </h6>
-                            <h6 id="dob" className="card-title">Date of Birth: </h6>
+                            <h4 className="card-title">Patient Profile</h4>
+                            <h3 id="name" className="card-title" >Display Name Here...</h3>
+                            <h5 id="nic" className="card-title">NIC: </h5>
+                            <h5 id="genderinfo" className="card-title">Gender: </h5>
+                            <h5 id="status" className="card-title">Status: </h5>
+                            <h5 id="dob" className="card-title">Date of Birth: </h5>
                         </div>
                     </div>
                     <div id="Sample2-header">
@@ -95,7 +182,7 @@ class EditPatient extends Component {
 
                                 <div className="form-group">
                                     <label htmlFor="DateOfBirth">DateOfBirth</label>
-                                    <Calendar onChange={(e) => this.datePicked(e, this)} value={this.state.date} />
+                                    <Calendar id="date" onChange={(e) => this.datePicked(e, this)} value={this.state.date} />
                                 </div>
                             </div>
                             <h2>Patient Personal Details</h2>
@@ -158,39 +245,17 @@ class EditPatient extends Component {
                                 </div>
 
                             </div>
-
-                            <h2>Patient Contact Details</h2>
-                            <div className="editPatientBlock">
-
-                                <div className="form-group">
-                                    <label htmlFor="select_photo">Select Patient Photo</label>
-                                    <div className="input-group mb-3">
-                                        <div className="custom-file">
-                                            <input type="file" onChange={(e) => this.handleChange(e.target.files,this)} className="custom-file-input" id="choosefile"></input>
-                                            <label className="custom-file-label" htmlFor="Choose_file">Choose file</label>
-                                        </div>
-                                        <div className="input-group-append">
-                                            <span className="input-group-text" id="">Upload</span>
-                                        </div>
-                                    </div>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <button type="Save" className="btn btn-primary" onClick={() => this.updatePatient(this)}>Update Details</button>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="Remarks">Remarks</label>
-                                    <textarea className="form-control" id="Remarks" rows="3"></textarea>
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-md-4">
-                                        <button type="Save" className="btn btn-primary" onClick={() => this.updatePatient(this)}>Update Details</button>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         );
     }
 }

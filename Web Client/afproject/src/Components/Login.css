@@ -88,9 +88,11 @@ body{
   margin: 75px 0 0 30%;
   background-color: white;
   width: 50%;
+  padding: 1%;
 }
 .card-header{
   background-color: #0099ff;
+  font-size: 200%;
 }
 .editPatientBlock{
   margin-left: 10%;

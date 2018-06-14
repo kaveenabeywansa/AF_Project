@@ -6,10 +6,13 @@ import DocAccCreate from './Components/DoctorReg';
 import NurseAccCreate from './Components/NurseReg';
 import EditPatient from './Components/EditPatient';
 
+
 export default () =>{
     return(
-    <BrowserRouter>
+
+   <BrowserRouter>
         <Switch>
+
             <Route path="/" exact component={Login} />
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={AccCreate} />
