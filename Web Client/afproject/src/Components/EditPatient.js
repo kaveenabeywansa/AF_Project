@@ -17,12 +17,13 @@ class EditPatient extends Component {
                 if (response.data.data.length === 1) {
                     var res = response.data.data[0];
 
-                    document.getElementById('name').innerHTML = res.Full_Name;
+                    document.getElementById('name').innerHTML = res.Title+res.Full_Name;
                     document.getElementById('nic').innerHTML += sessionStorage.getItem('patientnic');
                     document.getElementById('genderinfo').innerHTML += res.gender;
                     document.getElementById('status').innerHTML += res.civil_status;
                     document.getElementById('dob').innerHTML += res.DateOfBirth;
 
+                    document.getElementById('Title').value = res.Title;
                     document.getElementById('fullname').value = res.Full_Name;
                     document.getElementById('othername').value = res.other_name;
                     document.getElementById('civilstatus').value = res.civil_status;
@@ -49,6 +50,7 @@ class EditPatient extends Component {
     };
     updatePatient(obj) {
         axios.put('http://localhost:3001/patient/' + sessionStorage.getItem('patientnic'), {
+            Title: document.getElementById('Title').value,
             Full_Name: document.getElementById('fullname').value,
             other_name: document.getElementById('othername').value,
             civil_status: document.getElementById('civilstatus').value,
